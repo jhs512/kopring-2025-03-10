@@ -105,6 +105,7 @@ export default function ClientPage({
       wordBreak: "break-word",
       fontSize: "60px",
       fontWeight: "500",
+      fontFamily: "Pretendard",
       padding: "0 10px",
       display: "flex",
       flexWrap: "wrap",
