@@ -14,7 +14,7 @@ import client from "@/lib/backend/client";
 
 import { components } from "@/lib/backend/apiV1/schema";
 import {
-  getSummaryFromContent,
+  getThumbnailTextFromContent,
   getUplodableInputAccept,
 } from "@/lib/business/utils";
 
@@ -61,6 +61,7 @@ export default function ClientPage({
 
   const [attachmentInputKey, setAttachmentInputKey] = useState(0);
   const [post, setPost] = useState(_post);
+  const originThumbnailText = getThumbnailTextFromContent(post.content);
 
   useEffect(() => {
     setPost(_post);
@@ -114,9 +115,9 @@ export default function ClientPage({
       color: "black",
     });
 
-    const summary = getSummaryFromContent(content);
+    const thumbnailText = getThumbnailTextFromContent(content);
 
-    tempDiv.innerText = summary || content;
+    tempDiv.innerText = thumbnailText;
     document.body.appendChild(tempDiv);
 
     try {
@@ -182,7 +183,8 @@ export default function ClientPage({
       data.published !== post.published ||
       data.listed !== post.listed;
 
-    const isPostContentChanged = data.content !== post.content;
+    const isThumbnailTextChanged =
+      originThumbnailText !== getThumbnailTextFromContent(data.content);
 
     if (isPostDataChanged) {
       const response = await client.PUT("/api/v1/posts/{id}", {
@@ -220,7 +222,7 @@ export default function ClientPage({
       });
     }
 
-    if (isPostContentChanged) {
+    if (isThumbnailTextChanged) {
       const thumbnailResponse = await handleThumbnailUpload(
         data.content,
         post.id,
