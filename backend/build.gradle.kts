@@ -30,13 +30,6 @@ dependencies {
     // 개발/툴
     developmentOnly("org.springframework.boot:spring-boot-devtools")
 
-    // 롬복
-    compileOnly("org.projectlombok:lombok")
-    annotationProcessor("org.projectlombok:lombok")
-
-    testCompileOnly("org.projectlombok:lombok")
-    testAnnotationProcessor("org.projectlombok:lombok")
-
     // 스프링 부트 스타터
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")

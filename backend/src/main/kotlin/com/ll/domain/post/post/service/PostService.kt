@@ -5,7 +5,7 @@ import com.ll.domain.post.post.entity.Post
 import com.ll.domain.post.post.repository.PostRepository
 import com.ll.global.rsData.RsData
 import com.ll.standard.search.PostSearchKeywordTypeV1
-import lombok.RequiredArgsConstructor
+
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
@@ -15,7 +15,6 @@ import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 
 @Service
-@RequiredArgsConstructor
 class PostService(
     private val postRepository: PostRepository
 ) {

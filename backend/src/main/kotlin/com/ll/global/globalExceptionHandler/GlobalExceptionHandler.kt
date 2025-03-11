@@ -5,11 +5,10 @@ import com.ll.global.app.AppConfig.Companion.isNotProd
 import com.ll.global.exceptions.ServiceException
 import com.ll.global.rsData.RsData
 import com.ll.standard.base.Empty
-import lombok.RequiredArgsConstructor
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.FieldError
-import org.springframework.validation.ObjectError
+
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler

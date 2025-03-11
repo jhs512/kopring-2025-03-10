@@ -1,7 +1,6 @@
 package com.ll.global.app
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import lombok.SneakyThrows
 import org.apache.tika.Tika
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -65,7 +64,6 @@ class AppConfig {
         fun getTempDirPath(): String = System.getProperty("java.io.tmpdir")
 
         @JvmStatic
-        @SneakyThrows
         fun getResourcesSampleDirPath(): String {
             if (resourcesSampleDirPath == null) {
                 val resource = ClassPathResource("sample")

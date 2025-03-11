@@ -14,7 +14,7 @@ import com.ll.standard.util.Ut.file.toFile
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
-import lombok.RequiredArgsConstructor
+
 import org.springframework.http.MediaType
 import org.springframework.lang.NonNull
 import org.springframework.transaction.annotation.Transactional
@@ -23,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile
 
 @RestController
 @RequestMapping("/api/v1/posts/{postId}/genFiles")
-@RequiredArgsConstructor
 @Tag(name = "ApiV1PostGenFileController", description = "API 글 파일 컨트롤러")
 @SecurityRequirement(name = "bearerAuth")
 class ApiV1PostGenFileController(
