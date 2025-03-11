@@ -1,13 +1,13 @@
 "use client";
 
+import { toast } from "sonner";
+
 import { useTheme } from "next-themes";
 
 import client from "@/lib/backend/client";
 
 import type { components } from "@/lib/backend/apiV1/schema";
 import MonacoEditor from "@/lib/business/components/MonacoEditor";
-
-import { useToast } from "@/hooks/use-toast";
 
 interface Config {
   title?: string;
@@ -73,7 +73,6 @@ export default function ClientPage({
 }: {
   post: components["schemas"]["PostWithContentDto"];
 }) {
-  const { toast } = useToast();
   const { resolvedTheme } = useTheme();
   const savePost = async (value: string) => {
     try {
@@ -94,24 +93,18 @@ export default function ClientPage({
       });
 
       if (response.error) {
-        toast({
-          title: response.error.msg,
-        });
+        toast.error(response.error.msg);
 
         return;
       }
 
       if (response.data) {
-        toast({
-          title: response.data.msg,
-        });
+        toast(response.data.msg);
 
         sessionStorage.setItem("needToRefresh", "true");
       }
     } catch {
-      toast({
-        title: "저장 실패",
-      });
+      toast.error("저장 실패");
     }
   };
 

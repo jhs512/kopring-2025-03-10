@@ -42,6 +42,7 @@ export default function ClientPage({
         </DialogHeader>
         <div className="flex justify-center">
           {genFile.fileExtTypeCode == "img" && (
+            // eslint-disable-next-line @next/next/no-img-element
             <img src={genFile.publicUrl} alt="" />
           )}
           {genFile.fileExtTypeCode == "audio" && (

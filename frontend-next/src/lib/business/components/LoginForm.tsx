@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 import { useRouter } from "next/navigation";
@@ -21,8 +22,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-import { useToast } from "@/hooks/use-toast";
-
 const loginFormSchema = z.object({
   username: z
     .string()
@@ -41,7 +40,7 @@ type LoginFormInputs = z.infer<typeof loginFormSchema>;
 export default function LoginForm() {
   const router = useRouter();
   const { setLoginMember } = useGlobalLoginMember();
-  const { toast } = useToast();
+
   const form = useForm<LoginFormInputs>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
@@ -59,16 +58,11 @@ export default function LoginForm() {
     });
 
     if (response.error) {
-      toast({
-        title: response.error.msg,
-        variant: "destructive",
-      });
+      toast.error(response.error.msg);
       return;
     }
 
-    toast({
-      title: response.data.msg,
-    });
+    toast(response.data.msg);
 
     setLoginMember(response.data.data.item);
     router.replace("/");

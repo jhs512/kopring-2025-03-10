@@ -1,12 +1,11 @@
 import { ButtonHTMLAttributes } from "react";
+import { toast } from "sonner";
 
 import { useRouter } from "next/navigation";
 
 import client from "@/lib/backend/client";
 
 import { Button } from "@/components/ui/button";
-
-import { useToast } from "@/hooks/use-toast";
 
 import { Pencil } from "lucide-react";
 
@@ -21,7 +20,6 @@ const PostWriteButton = ({
   onClick,
   ...props
 }: PostWriteButtonProps) => {
-  const { toast } = useToast();
   const router = useRouter();
 
   const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -33,14 +31,9 @@ const PostWriteButton = ({
     const response = await client.POST("/api/v1/posts/temp");
 
     if (response.error) {
-      toast({
-        title: response.error.msg,
-        variant: "destructive",
-      });
+      toast.error(response.error.msg);
     } else {
-      toast({
-        title: response.data.msg,
-      });
+      toast(response.data.msg);
 
       router.replace(`/post/${response.data.data.id}/edit`);
     }

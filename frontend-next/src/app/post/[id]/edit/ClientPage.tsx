@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import html2canvas from "html2canvas";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 import Link from "next/link";
@@ -31,8 +32,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
-import { useToast } from "@/hooks/use-toast";
-
 const writeFormSchema = z.object({
   title: z
     .string()
@@ -59,7 +58,6 @@ export default function ClientPage({
   post: components["schemas"]["PostWithContentDto"];
 }) {
   const router = useRouter();
-  const { toast } = useToast();
 
   const [attachmentInputKey, setAttachmentInputKey] = useState(0);
   const [post, setPost] = useState(_post);
@@ -201,10 +199,7 @@ export default function ClientPage({
       });
 
       if (response.error) {
-        toast({
-          title: response.error.msg,
-          variant: "destructive",
-        });
+        toast.error(response.error.msg);
         return;
       }
 
@@ -216,17 +211,11 @@ export default function ClientPage({
         listed: data.listed,
       });
 
-      toast({
-        title: response.data.msg,
-        action: (
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => router.push(`/post/${post.id}`)}
-          >
-            글 보기
-          </Button>
-        ),
+      toast(response.data.msg, {
+        action: {
+          label: "글 보기",
+          onClick: () => router.push(`/post/${post.id}`),
+        },
       });
     }
 
@@ -237,10 +226,9 @@ export default function ClientPage({
       );
 
       if (thumbnailResponse.error) {
-        toast({
-          title: thumbnailResponse.error.msg,
-          variant: "destructive",
-        });
+        toast.error(thumbnailResponse.error.msg);
+
+        return;
       }
     }
 
@@ -251,10 +239,7 @@ export default function ClientPage({
       );
 
       if (uploadResponse.error) {
-        toast({
-          title: uploadResponse.error.msg,
-          variant: "destructive",
-        });
+        toast.error(uploadResponse.error.msg);
         return;
       }
 
@@ -266,9 +251,7 @@ export default function ClientPage({
 
       setAttachmentInputKey((prev) => prev + 1);
 
-      toast({
-        title: uploadResponse.data.msg,
-      });
+      toast(uploadResponse.data.msg);
     }
   };
 
