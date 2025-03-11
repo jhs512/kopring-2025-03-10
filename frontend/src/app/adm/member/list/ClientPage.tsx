@@ -234,7 +234,7 @@ export default function ClientPage({
               <li key={item.id}>
                 <Card className="hover:bg-accent/50 transition-colors">
                   <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
+                    <CardTitle className="flex items-center gap-2 break-all">
                       <Badge variant="outline">{item.id}</Badge>
                       {item.username}
                     </CardTitle>

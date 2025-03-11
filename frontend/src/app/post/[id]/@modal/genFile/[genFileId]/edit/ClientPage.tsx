@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 import { useRouter } from "next/navigation";
@@ -30,8 +31,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-import { useToast } from "@/hooks/use-toast";
-
 import { Download } from "lucide-react";
 
 const editFormSchema = z.object({
@@ -48,7 +47,6 @@ export default function ClientPage({
   genFile: components["schemas"]["PostGenFileDto"];
 }) {
   const router = useRouter();
-  const { toast } = useToast();
 
   const form = useForm<EditFormInputs>({
     resolver: zodResolver(editFormSchema),
@@ -69,16 +67,11 @@ export default function ClientPage({
     });
 
     if (response.error) {
-      toast({
-        title: response.error.msg,
-        variant: "destructive",
-      });
+      toast.error(response.error.msg);
       return;
     }
 
-    toast({
-      title: response.data.msg,
-    });
+    toast(response.data.msg);
 
     sessionStorage.setItem("needToRefresh", "true");
     router.back();
@@ -101,6 +94,7 @@ export default function ClientPage({
 
         <div className="flex justify-center">
           {genFile.fileExtTypeCode == "img" && (
+            // eslint-disable-next-line @next/next/no-img-element
             <img src={genFile.publicUrl} alt="" />
           )}
           {genFile.fileExtTypeCode == "audio" && (

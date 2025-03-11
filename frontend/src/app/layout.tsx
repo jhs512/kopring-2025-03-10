@@ -1,15 +1,11 @@
-import { config } from "@fortawesome/fontawesome-svg-core";
-import "@fortawesome/fontawesome-svg-core/styles.css";
 import type { Metadata } from "next";
 
 import localFont from "next/font/local";
 
-import { Toaster } from "@/components/ui/toaster";
+import { Toaster } from "@/components/ui/sonner";
 
 import { ClientLayout } from "./ClientLayout";
 import "./globals.css";
-
-config.autoAddCss = false;
 
 const pretendard = localFont({
   src: "./../../node_modules/pretendard/dist/web/variable/woff2/PretendardVariable.woff2",
@@ -29,12 +25,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="ko"
-      className={`${pretendard.variable}`}
-      suppressHydrationWarning
-    >
-      <body className={`${pretendard.className} antialiased`}>
+    <html lang="ko" suppressHydrationWarning>
+      <body
+        className={`${pretendard.variable} ${pretendard.className} antialiased`}
+      >
         <div
           className="flex flex-col min-h-[100dvh] bg-background"
           vaul-drawer-wrapper="true"

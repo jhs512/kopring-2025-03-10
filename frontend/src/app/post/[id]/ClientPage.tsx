@@ -2,6 +2,7 @@
 
 import { Editor } from "@toast-ui/react-editor";
 import { use, useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 
 import { useTheme } from "next-themes";
 
@@ -27,8 +28,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-import { useToast } from "@/hooks/use-toast";
-
 import { Download, Eye, ListX, Lock } from "lucide-react";
 
 export default function ClientPage({
@@ -45,7 +44,6 @@ export default function ClientPage({
 
   // any 타입을 Editor로 변경
   const toastUiEditorViewerRef = useRef<Editor>(null);
-  const { toast } = useToast();
   const lastModifyDateAfterRef = useRef(post.modifyDate);
 
   const POLLING_INTERVAL = 10000; // 폴링 간격을 상수로 정의 (밀리초)
@@ -120,8 +118,7 @@ export default function ClientPage({
             content: res.data.content,
           }));
 
-          toast({
-            title: "문서 업데이트",
+          toast("문서 업데이트", {
             description: "새로운 내용으로 업데이트되었습니다.",
           });
         }
@@ -154,7 +151,7 @@ export default function ClientPage({
       clearTimeout(timeoutId);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, [post.id, toast]); // toast 의존성 추가
+  }, [post.id]); // toast 의존성 추가
 
   return (
     <main className="container mt-2 mx-auto px-2">

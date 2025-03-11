@@ -1,5 +1,7 @@
 "use client";
 
+import { toast } from "sonner";
+
 import { useRouter } from "next/navigation";
 
 import client from "@/lib/backend/client";
@@ -14,11 +16,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-import { useToast } from "@/hooks/use-toast";
-
 export default function ClientPage({ id }: { id: string }) {
   const router = useRouter();
-  const { toast } = useToast();
 
   const onDelete = async () => {
     const response = await client.DELETE("/api/v1/posts/{id}", {
@@ -30,16 +29,11 @@ export default function ClientPage({ id }: { id: string }) {
     });
 
     if (response.error) {
-      toast({
-        title: response.error.msg,
-        variant: "destructive",
-      });
+      toast.error(response.error.msg);
       return;
     }
 
-    toast({
-      title: response.data.msg,
-    });
+    toast(response.data.msg);
 
     router.replace("/post/list");
   };

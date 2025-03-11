@@ -83,6 +83,19 @@ export function getSummaryFromContent(content: string) {
   return "";
 }
 
+export function getThumbnailTextFromContent(content: string) {
+  const summary = getSummaryFromContent(content);
+  const thumbnailText = summary || content;
+
+  const maxLength = 200;
+
+  if (thumbnailText.length <= maxLength) {
+    return thumbnailText;
+  }
+
+  return thumbnailText.slice(0, maxLength) + "...";
+}
+
 // 객체에서 특정 키만 필터링하는 유틸리티 함수
 export function filterObjectKeys(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

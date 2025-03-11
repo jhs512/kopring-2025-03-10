@@ -1,9 +1,10 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import html2canvas from "html2canvas";
+import html2canvas from "html2canvas-pro";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 import Link from "next/link";
@@ -13,7 +14,7 @@ import client from "@/lib/backend/client";
 
 import { components } from "@/lib/backend/apiV1/schema";
 import {
-  getSummaryFromContent,
+  getThumbnailTextFromContent,
   getUplodableInputAccept,
 } from "@/lib/business/utils";
 
@@ -30,8 +31,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-
-import { useToast } from "@/hooks/use-toast";
 
 const writeFormSchema = z.object({
   title: z
@@ -59,10 +58,10 @@ export default function ClientPage({
   post: components["schemas"]["PostWithContentDto"];
 }) {
   const router = useRouter();
-  const { toast } = useToast();
 
   const [attachmentInputKey, setAttachmentInputKey] = useState(0);
   const [post, setPost] = useState(_post);
+  const originThumbnailText = getThumbnailTextFromContent(post.content);
 
   useEffect(() => {
     setPost(_post);
@@ -107,6 +106,7 @@ export default function ClientPage({
       wordBreak: "break-word",
       fontSize: "60px",
       fontWeight: "500",
+      fontFamily: "Pretendard",
       padding: "0 10px",
       display: "flex",
       flexWrap: "wrap",
@@ -115,9 +115,9 @@ export default function ClientPage({
       color: "black",
     });
 
-    const summary = getSummaryFromContent(content);
+    const thumbnailText = getThumbnailTextFromContent(content);
 
-    tempDiv.innerText = summary || content;
+    tempDiv.innerText = thumbnailText;
     document.body.appendChild(tempDiv);
 
     try {
@@ -183,7 +183,8 @@ export default function ClientPage({
       data.published !== post.published ||
       data.listed !== post.listed;
 
-    const isPostContentChanged = data.content !== post.content;
+    const isThumbnailTextChanged =
+      originThumbnailText !== getThumbnailTextFromContent(data.content);
 
     if (isPostDataChanged) {
       const response = await client.PUT("/api/v1/posts/{id}", {
@@ -201,10 +202,7 @@ export default function ClientPage({
       });
 
       if (response.error) {
-        toast({
-          title: response.error.msg,
-          variant: "destructive",
-        });
+        toast.error(response.error.msg);
         return;
       }
 
@@ -216,31 +214,24 @@ export default function ClientPage({
         listed: data.listed,
       });
 
-      toast({
-        title: response.data.msg,
-        action: (
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => router.push(`/post/${post.id}`)}
-          >
-            글 보기
-          </Button>
-        ),
+      toast(response.data.msg, {
+        action: {
+          label: "글 보기",
+          onClick: () => router.push(`/post/${post.id}`),
+        },
       });
     }
 
-    if (isPostContentChanged) {
+    if (isThumbnailTextChanged) {
       const thumbnailResponse = await handleThumbnailUpload(
         data.content,
         post.id,
       );
 
       if (thumbnailResponse.error) {
-        toast({
-          title: thumbnailResponse.error.msg,
-          variant: "destructive",
-        });
+        toast.error(thumbnailResponse.error.msg);
+
+        return;
       }
     }
 
@@ -251,10 +242,7 @@ export default function ClientPage({
       );
 
       if (uploadResponse.error) {
-        toast({
-          title: uploadResponse.error.msg,
-          variant: "destructive",
-        });
+        toast.error(uploadResponse.error.msg);
         return;
       }
 
@@ -266,9 +254,7 @@ export default function ClientPage({
 
       setAttachmentInputKey((prev) => prev + 1);
 
-      toast({
-        title: uploadResponse.data.msg,
-      });
+      toast(uploadResponse.data.msg);
     }
   };
 
